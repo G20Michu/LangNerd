@@ -1,5 +1,5 @@
 using System;
-
+namespace LangNerd.Server.Api.Exceptions;
 public static class Routes
 {
     public static void MapAppRoutes(this IEndpointRouteBuilder app)

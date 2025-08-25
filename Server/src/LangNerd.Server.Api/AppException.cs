@@ -1,4 +1,2 @@
-public class AppException : Exception
-{
-    public AppException(string message) : base(message) { }
-}
+namespace LangNerd.Server.Api.Exceptions;
+public class AppException(string message) : Exception(message); 

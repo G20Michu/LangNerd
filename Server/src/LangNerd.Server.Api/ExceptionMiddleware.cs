@@ -8,12 +8,10 @@ namespace LangNerd.Server.Api.Middleware;
 internal sealed class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly ILogger<ExceptionMiddleware> _logger;
 
-    public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
+    public ExceptionMiddleware(RequestDelegate next)
     {
         _next = next;
-        _logger = logger;
     }
 
     public async Task InvokeAsync(HttpContext context,IExceptionMapperRoot mapper)
@@ -24,7 +22,6 @@ internal sealed class ExceptionMiddleware
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Unhandled exception occurred");
             var mapped = mapper.Map(ex);
 
             context.Response.ContentType = "application/json";
@@ -36,7 +33,7 @@ internal sealed class ExceptionMiddleware
                 _ => 500                       //Internal Server Error
             };
 
-            await context.Response.WriteAsync(JsonSerializer.Serialize(new
+            await context.Response.WriteAsJsonAsync(JsonSerializer.Serialize(new
             {
                 message = mapped.Message,
                 code = mapped.StatusCode
