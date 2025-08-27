@@ -27,16 +27,11 @@ internal sealed class ExceptionMiddleware
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = mapped.StatusCode;
 
-            context.Response.StatusCode = ex switch
-            {
-                AppException => 400,           //App Error
-                _ => 500                       //Internal Server Error
-            };
-
             await context.Response.WriteAsJsonAsync(JsonSerializer.Serialize(new
             {
                 message = mapped.Message,
-                code = mapped.StatusCode
+                code = mapped.Code,
+                statusCode = mapped.StatusCode,
             }));
         }
     }

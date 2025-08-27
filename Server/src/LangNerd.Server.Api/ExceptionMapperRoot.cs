@@ -10,7 +10,7 @@ public sealed class ExceptionMapperRoot : IExceptionMapperRoot
         {
             AppException appEx => new ExceptionResponse(
                 appEx.Message,
-                "APP_ERROR",
+                $"{exception.GetType().Name}",
                 StatusCodes.Status400BadRequest
             ),
 

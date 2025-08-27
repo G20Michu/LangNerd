@@ -4,5 +4,3 @@ public interface IExceptionMapperRoot
 {
     ExceptionResponse Map(Exception exception);
 }
-
-public record ExceptionResponse(string Message, string Code, int StatusCode);
