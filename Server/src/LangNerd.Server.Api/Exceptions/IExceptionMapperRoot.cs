@@ -1,3 +1,4 @@
+
 namespace LangNerd.Server.Api.Exceptions;
 
 public interface IExceptionMapperRoot

@@ -1,14 +1,16 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using DotNetEnv;
+
 using LangNerd.Server.Api.Databse;
-using Npgsql;
 using LangNerd.Server.Api.Exceptions;
 using LangNerd.Server.Api.Middleware;
+using LangNerd.Server.Api.Env;
+using LangNerd.Server.Api;
+var envFile = Path.Combine(Directory.GetCurrentDirectory(), "Env", ".env");
+EnvLoader.Load(envFile);
 
 
 
-Env.Load();
 
 var host = Environment.GetEnvironmentVariable("DB_HOST");
 var port = Environment.GetEnvironmentVariable("DB_PORT");
@@ -17,6 +19,8 @@ var user = Environment.GetEnvironmentVariable("DB_USER");
 var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables();
+Console.WriteLine($"DB_HOST {builder.Configuration["DB_HOST"]}");
 
 builder.Services.AddSingleton<IExceptionMapperRoot, ExceptionMapperRoot>();
 

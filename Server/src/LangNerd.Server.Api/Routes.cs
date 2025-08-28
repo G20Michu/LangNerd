@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using LangNerd.Server.Api.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace LangNerd.Server.Api.Exceptions;
+namespace LangNerd.Server.Api;
 public static class Routes
 {
     public static void MapAppRoutes(this IEndpointRouteBuilder app)
