@@ -1,19 +1,20 @@
+using Microsoft.AspNetCore.Components.Forms.Mapping;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using LangNerd.Server.Api.Exceptions;
 
+namespace LangNerd.Server.Api.Middleware;
 internal sealed class ExceptionMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly ILogger<ExceptionMiddleware> _logger;
 
-    public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
+    public ExceptionMiddleware(RequestDelegate next)
     {
         _next = next;
-        _logger = logger;
     }
 
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context,IExceptionMapperRoot mapper)
     {
         try
         {
@@ -21,19 +22,17 @@ internal sealed class ExceptionMiddleware
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Unhandled exception occurred");
+            var mapped = mapper.Map(ex);
 
             context.Response.ContentType = "application/json";
+            context.Response.StatusCode = mapped.StatusCode;
 
-           
-            context.Response.StatusCode = ex switch
+            await context.Response.WriteAsJsonAsync(JsonSerializer.Serialize(new
             {
-                AppException => 400,           //App Error
-                _ => 500                       //Internal Server Error
-            };
-
-            var response = new { error = ex.Message };
-            await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+                message = mapped.Message,
+                code = mapped.Code,
+                statusCode = mapped.StatusCode,
+            }));
         }
     }
 }
