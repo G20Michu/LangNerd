@@ -1,9 +1,8 @@
-namespace LangNerd.Server.Api.Models
+namespace LangNerd.Server.Api.Models;
+
+public class RegisterDto
 {
-    public class RegisterDto
-    {
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
-    }
+    public string Username { get; set; }
+    public string Password { get; set; }
+    public string Email { get; set; }
 }
