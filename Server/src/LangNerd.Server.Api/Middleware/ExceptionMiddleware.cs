@@ -2,20 +2,13 @@ using System.Text.Json;
 using LangNerd.Server.Api.Exceptions;
 
 namespace LangNerd.Server.Api.Middleware;
-internal sealed class ExceptionMiddleware
+internal sealed class ExceptionMiddleware(IExceptionMapperRoot mapper) : IMiddleware
 {
-    private readonly RequestDelegate _next;
-
-    public ExceptionMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
-
-    public async Task InvokeAsync(HttpContext context,IExceptionMapperRoot mapper)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         try
         {
-            await _next(context);
+            await next(context);
         }
         catch (Exception ex)
         {
