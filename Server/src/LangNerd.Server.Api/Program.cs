@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-using LangNerd.Server.Api.Databse;
+using LangNerd.Server.Api.Database;
 using LangNerd.Server.Api.Exceptions;
 using LangNerd.Server.Api.Middleware;
 using LangNerd.Server.Api.Env;
@@ -36,10 +36,8 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
+
 app.UseHttpsRedirection();
-app.MapAppRoutes();
-app.UseAuthentication();
-app.UseAuthorization();
-app.UseMiddleware<ExceptionMiddleware>();
-app.MapDefaultControllerRoute();
+
 app.Run();
