@@ -1,8 +1,10 @@
-﻿using LangNerd.Server.Api.Database;
+﻿using System.Threading.Tasks;
+using LangNerd.Server.Api.Database;
 using LangNerd.Server.Api.Exceptions;
 using LangNerd.Server.Api.Middleware;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace LangNerd.Server.Api.Extensions;
 
@@ -13,11 +15,13 @@ public static class Extensions
         LoadEnv();
         builder.Configuration.AddEnvironmentVariables();
         builder.Services.ConfigureDbContext(builder.Configuration);
-        builder.Services.AddSingleton<IExceptionMapperRoot, ExceptionMapperRoot>();
+        builder.Services.AddScoped<IExceptionMapperRoot, ExceptionMapperRoot>();
         builder.Services.AddIdentity<IdentityUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
         builder.Services.AddControllersWithViews();
+        builder.Services.AddScoped<ExceptionMiddleware>();
+        builder.Services.AddScoped<DataLoader>();
     }
 
     private static void LoadEnv()
@@ -39,7 +43,6 @@ public static class Extensions
             {
                 var key = parts[0].Trim();
                 var value = parts[1].Trim();
-                Console.WriteLine($"key {key} , value {value}");
                 Environment.SetEnvironmentVariable(key, value);
             }
         }
@@ -56,8 +59,13 @@ public static class Extensions
         services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
     }
 
-    public static void UseApplication(this WebApplication app)
+    public static async Task UseApplication(this WebApplication app)
     {
+        using var scope = app.Services.CreateScope();
+        var dbcontext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var dataloader = scope.ServiceProvider.GetRequiredService<DataLoader>();
+        dbcontext.Database.Migrate();
+        await dataloader.CheckAndLoad("Data/words.json");
         app.UseHttpsRedirection();
         app.MapAppRoutes();
         app.UseAuthentication();

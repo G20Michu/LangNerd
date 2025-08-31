@@ -7,6 +7,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
 {
     public DbSet<WordModel> Words { get; set; }
     public DbSet<WordDefinition> WordDefinitions { get; set; }
+    public DbSet<WordInfo> WordInfo { get; set; }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
@@ -24,6 +25,10 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
                 .IsRequired();
         });
         builder.Entity<WordDefinition>(entity =>
+        {
+            entity.HasKey(w => w.Id);
+        });
+        builder.Entity<WordInfo>(entity =>
         {
             entity.HasKey(w => w.Id);
         });
