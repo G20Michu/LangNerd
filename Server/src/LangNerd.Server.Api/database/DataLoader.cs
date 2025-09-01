@@ -66,7 +66,6 @@ public class DataLoader
         .OrderBy(w => w.Id)
         .ToListAsync();
 
-        List<WordDefinition> WordDefinitions;
         var allDefinitions = new List<WordDefinition>();
 
         foreach (var word in storedWords)
