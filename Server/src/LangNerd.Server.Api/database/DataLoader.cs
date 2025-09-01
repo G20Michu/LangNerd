@@ -61,15 +61,12 @@ public class DataLoader
         Console.WriteLine("Reloading database...");
 
         var jsonWords = GetJsonWords(filePath);
-        Console.WriteLine("Downloaded successfully variables from json");
         var storedWords = await _dbContext.Words
         .Include(w => w.Definitions)
         .OrderBy(w => w.Id)
         .ToListAsync();
 
-        Console.WriteLine("Downloaded successfully words from database ");
         List<WordDefinition> WordDefinitions;
-        // lista wszystkich definicji
         var allDefinitions = new List<WordDefinition>();
 
         foreach (var word in storedWords)
@@ -84,7 +81,6 @@ public class DataLoader
         }
 
 
-        Console.WriteLine("Downloaded successfully definitions from database 2");
         //if word was removed from json also remove that from database 
         foreach (var word in storedWords)
         {
@@ -92,7 +88,6 @@ public class DataLoader
             if (existingJsonWord == null)
             {
                 _dbContext.Words.RemoveRange(word);
-                Console.WriteLine($"Removed Word {word.Word}");
             }
         }
         foreach (var jsonWord in jsonWords)
@@ -113,10 +108,8 @@ public class DataLoader
                     bool allDbDefsInJson = jsonDefs.All(def => dbDefs.Contains(def));
                     if (!allDbDefsInJson)
                     {
-                        // Usuń wszystkie definicje powiązane z tym słowem
                         _dbContext.WordDefinitions.RemoveRange(existingWord.Definitions);
 
-                        // Dodaj nowe definicje z JSON
                         foreach (var jsonDef in jsonWord.Definitions)
                         {
                             var newWordDefinition = new WordDefinition
@@ -128,8 +121,6 @@ public class DataLoader
                             _dbContext.WordDefinitions.Add(newWordDefinition);
                         }
 
-                        Console.WriteLine($"|||ExistingWord||| {existingWord.Word} |||jsonword||| {jsonWord.Word}");
-                        Console.WriteLine($"|||Existing Word Definition:||| {string.Join("; ", existingWord.Definitions.Select(d => d.Definition))} |||Json Word Definition:||| {string.Join("; ", jsonWord.Definitions.Select(d => d.Definition))}");
                     }
 
                 }
@@ -151,9 +142,7 @@ public class DataLoader
 
         try
         {
-            Console.WriteLine("Database Saving ...");
             await _dbContext.SaveChangesAsync();
-            Console.WriteLine("Database reloaded successfully");
         }
         catch (Exception ex)
         {
