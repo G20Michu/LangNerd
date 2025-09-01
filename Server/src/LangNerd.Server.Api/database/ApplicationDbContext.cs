@@ -30,7 +30,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
         });
         builder.Entity<WordInfo>(entity =>
         {
-            entity.HasKey(w => w.Id);
+            entity.HasNoKey();
         });
     }
 }

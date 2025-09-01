@@ -158,7 +158,6 @@ public class DataLoader
             throw new FileNotFoundException("words.json not found");
 
         var wordInfo = await _dbContext.WordInfo
-            .OrderBy(w => w.Id)
             .FirstOrDefaultAsync();
 
         var computedHash = ComputeFileHash(filePath);
