@@ -733,7 +733,7 @@
     },
     {
         "word": "Hyperbole",
-        "definition": "grossly exaggerated speech"
+        "definition": "grossly exaggerated speech; exaggeration [hyperbolic (a)]"
     },
     {
         "word": "Legend",
@@ -841,7 +841,7 @@
     },
     {
         "word": "Deliberate",
-        "definition": "to think over deeply"
+        "definition": "to think over deeply; 1. slow (a);"
     },
     {
         "word": "Euphony",
@@ -921,7 +921,7 @@
     },
     {
         "word": "Demur",
-        "definition": "hesitate; refuse"
+        "definition": "hesitate; refuse; object; hesitate to accept"
     },
     {
         "word": "Exacerbate",
@@ -2345,7 +2345,7 @@
     },
     {
         "word": "Patronize",
-        "definition": "condescend to; behave in an arrogant manner towards"
+        "definition": "condescend to; behave in an arrogant manner towards; 1. to talk down to; condescend;"
     },
     {
         "word": "Protagonist",
@@ -3169,7 +3169,7 @@
     },
     {
         "word": "Strut",
-        "definition": "swagger; show off"
+        "definition": "swagger; show off; 1. supporting rod (n);"
     },
     {
         "word": "Voluble",
@@ -3936,10 +3936,6 @@
         "definition": "important"
     },
     {
-        "word": "Deliberate",
-        "definition": "1. slow (a);"
-    },
-    {
         "word": "Equivocation",
         "definition": "speaking ambiguously [equivocate (v), equivocal (a)]"
     },
@@ -3997,7 +3993,7 @@
     },
     {
         "word": "Diaphanous",
-        "definition": "transparent; thin and delicate"
+        "definition": "transparent; thin and delicate; transparent; thin and delicate"
     },
     {
         "word": "Feint",
@@ -4274,10 +4270,6 @@
     {
         "word": "Cumbersome",
         "definition": "bulky; difficult to carry [encumber = to burden]"
-    },
-    {
-        "word": "Diaphanous",
-        "definition": "transparent; thin and delicate"
     },
     {
         "word": "Dispatch",
@@ -4628,10 +4620,6 @@
         "definition": "contradict"
     },
     {
-        "word": "Hyperbole",
-        "definition": "exaggeration [hyperbolic (a)]"
-    },
-    {
         "word": "Modest",
         "definition": "1. bashful; unpretentious;"
     },
@@ -4932,10 +4920,6 @@
         "definition": "grow and spread [proliferation (n)]"
     },
     {
-        "word": "Strut",
-        "definition": "1. supporting rod (n);"
-    },
-    {
         "word": "Usury",
         "definition": "lending money at high interest rates"
     },
@@ -5018,10 +5002,6 @@
     {
         "word": "Veneration",
         "definition": "worship; respect [venerable (a), venerate (v)]"
-    },
-    {
-        "word": "Demur",
-        "definition": "object; hesitate to accept"
     },
     {
         "word": "Duplicity",
@@ -5198,10 +5178,6 @@
     {
         "word": "Leaven",
         "definition": "to make light; modify; cause bread to rise using yeast etc."
-    },
-    {
-        "word": "Patronize",
-        "definition": "1. to talk down to; condescend;"
     },
     {
         "word": "Prominent",
@@ -5816,4 +5792,3 @@
         "definition": "moderates"
     }
 ]
-
