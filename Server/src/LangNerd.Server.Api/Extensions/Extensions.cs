@@ -1,12 +1,8 @@
 ﻿using LangNerd.Server.Api.Database;
 using LangNerd.Server.Api.Exceptions;
 using LangNerd.Server.Api.Middleware;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace LangNerd.Server.Api.Extensions;
 
@@ -24,8 +20,13 @@ public static class Extensions
         builder.Services.AddControllersWithViews();
         builder.Services.AddScoped<ExceptionMiddleware>();
         builder.Services.AddScoped<DataLoader>();
+        builder.Services.AddCors(x =>
+        {
+            x.AddPolicy("DEV", x => x.SetIsOriginAllowed(x => true).AllowAnyMethod().AllowCredentials().AllowAnyHeader());
+        });
         builder.Services.ConfigureApplicationCookie(options =>
         {
+            options.Cookie.SameSite = SameSiteMode.None;
             options.ExpireTimeSpan = TimeSpan.FromDays(365);
             options.Events.OnRedirectToLogin = c =>
             {
@@ -86,6 +87,7 @@ public static class Extensions
         dbcontext.Database.Migrate();
         await dataloader.CheckAndLoad("Data/words.json");
         app.UseHttpsRedirection();
+        app.UseCors("DEV");
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseMiddleware<ExceptionMiddleware>();

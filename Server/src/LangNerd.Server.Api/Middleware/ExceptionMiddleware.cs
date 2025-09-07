@@ -17,12 +17,11 @@ internal sealed class ExceptionMiddleware(IExceptionMapperRoot mapper) : IMiddle
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = mapped.StatusCode;
 
-            await context.Response.WriteAsJsonAsync(JsonSerializer.Serialize(new
+            await context.Response.WriteAsJsonAsync(new
             {
                 message = mapped.Message,
                 code = mapped.Code,
-                statusCode = mapped.StatusCode,
-            }));
+            });
         }
     }
 }
