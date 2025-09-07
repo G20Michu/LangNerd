@@ -174,9 +174,10 @@ public class DataLoader
         }
         else
         {
-            var newWordInfo = new WordInfo { FileHash = computedHash };
-            await _dbContext.WordInfo.AddAsync(newWordInfo);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.Database.ExecuteSqlAsync($"""
+                INSERT INTO "WordInfo"("FileHash")
+                VALUES('{computedHash}')
+                """);
             await ReloadDatabase(filePath);
         }
     }

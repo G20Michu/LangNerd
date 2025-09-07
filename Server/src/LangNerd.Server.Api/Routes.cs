@@ -1,16 +1,13 @@
 using LangNerd.Server.Api.Models;
-using Microsoft.AspNetCore.Identity;
-using LangNerd.Server.Api.Authentication;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 namespace LangNerd.Server.Api;
 
 public static class Routes
 {
     public static void MapAppRoutes(this IEndpointRouteBuilder app)
     {
-        app.MapGet("/", (HttpContext httpContext) => RoutesFunc.MainPage(httpContext));
+        app.MapGet("/", (HttpContext httpContext) => RoutesFunc.MainPage(httpContext)).RequireAuthorization();
         app.MapPost("/login", (LoginDto dto, SignInManager<IdentityUser> signInManager, IConfiguration configuration, HttpContext http)
         => RoutesFunc.Login(dto, signInManager, configuration, http)).WithMetadata(new AllowAnonymousAttribute());
 
@@ -23,7 +20,7 @@ public class RoutesFunc
 {
     public static string MainPage(HttpContext httpContext)
     {
-        return $"Hello {httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier)}";
+        return $"Hello {httpContext.User.Identity!.Name}";
     }
 
     public static async Task<IResult> Login(LoginDto dto, SignInManager<IdentityUser> signInManager, IConfiguration configuration, HttpContext http)
@@ -32,18 +29,6 @@ public class RoutesFunc
 
         if (result.Succeeded)
         {
-            var jwt = JwtService.GenerateJwt(dto.Username, configuration);
-
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = DateTime.UtcNow.AddHours(1)
-            };
-
-            http.Response.Cookies.Append("jwt", jwt, cookieOptions);
-
             return Results.Ok("User logged in successfully");
         }
         else
