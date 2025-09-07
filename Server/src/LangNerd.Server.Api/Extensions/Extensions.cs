@@ -26,6 +26,7 @@ public static class Extensions
         builder.Services.AddScoped<DataLoader>();
         builder.Services.ConfigureApplicationCookie(options =>
         {
+            options.ExpireTimeSpan = TimeSpan.FromDays(365);
             options.Events.OnRedirectToLogin = c =>
             {
                 c.Response.StatusCode = StatusCodes.Status401Unauthorized;
