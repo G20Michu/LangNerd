@@ -26,6 +26,8 @@ public static class Extensions
         });
         builder.Services.ConfigureApplicationCookie(options =>
         {
+            // TODO: Do poprawy po tym jak ogarniemy certy dla frontu na dockerze
+            options.Cookie.SecurePolicy = CookieSecurePolicy.None;
             options.Cookie.SameSite = SameSiteMode.None;
             options.ExpireTimeSpan = TimeSpan.FromDays(365);
             options.Events.OnRedirectToLogin = c =>

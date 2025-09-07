@@ -1,14 +1,16 @@
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://localhost:7262';
+
 export async function fetchLogin(username: string, password: string): Promise<void> {
-    return fetchEndpointNoResult("https://localhost:7262/login", "POST", { Username: username, Password: password });
+    return fetchEndpointNoResult(`${API_BASE_URL}/login`, "POST", { Username: username, Password: password });
 }
 
 export async function fetchHome(): Promise<string> {
-    var response = await fetchEndpoint("https://localhost:7262/", "GET", null);
+    var response = await fetchEndpoint(`${API_BASE_URL}/`, "GET", null);
     return response.text();
 }
 
 export async function fetchRegister(username: string, password: string, email: string) {
-    return fetchEndpointNoResult("https://localhost:7262/register", "POST", { Username: username, Password: password, Email: email });
+    return fetchEndpointNoResult(`${API_BASE_URL}/register`, "POST", { Username: username, Password: password, Email: email });
 }
 
 

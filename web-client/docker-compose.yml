@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  web-client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_API_URL=https://localhost:7262
+    container_name: langnerd-web-client
+    restart: unless-stopped
+    
+    # Optional: For development with volume mounting
+    # volumes:
+    #   - ./src:/app/src
+    #   - ./public:/app/public
