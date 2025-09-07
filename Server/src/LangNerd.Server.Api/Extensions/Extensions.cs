@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
-using LangNerd.Server.Api.Authentication;
-using LangNerd.Server.Api.Database;
+﻿using LangNerd.Server.Api.Database;
 using LangNerd.Server.Api.Exceptions;
 using LangNerd.Server.Api.Middleware;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace LangNerd.Server.Api.Extensions;
 
@@ -23,6 +24,22 @@ public static class Extensions
         builder.Services.AddControllersWithViews();
         builder.Services.AddScoped<ExceptionMiddleware>();
         builder.Services.AddScoped<DataLoader>();
+        builder.Services.ConfigureApplicationCookie(options =>
+        {
+            options.Events.OnRedirectToLogin = c =>
+            {
+                c.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return Task.CompletedTask;
+            };
+
+            options.Events.OnRedirectToAccessDenied = c =>
+            {
+                c.Response.StatusCode = StatusCodes.Status403Forbidden;
+                return Task.CompletedTask;
+            };
+        });
+        builder.Services.AddAuthentication();
+        builder.Services.AddAuthorization();
     }
 
     private static void LoadEnv()
@@ -68,11 +85,9 @@ public static class Extensions
         dbcontext.Database.Migrate();
         await dataloader.CheckAndLoad("Data/words.json");
         app.UseHttpsRedirection();
-        app.MapAppRoutes();
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseMiddleware<ExceptionMiddleware>();
-        app.UseMiddleware<JwtMiddleware>();
-        app.MapDefaultControllerRoute();
+        app.MapAppRoutes();
     }
 }
