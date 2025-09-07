@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using LangNerd.Server.Api.Authentication;
 using LangNerd.Server.Api.Database;
 using LangNerd.Server.Api.Exceptions;
 using LangNerd.Server.Api.Middleware;
@@ -71,6 +72,7 @@ public static class Extensions
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseMiddleware<ExceptionMiddleware>();
+        app.UseMiddleware<JwtMiddleware>();
         app.MapDefaultControllerRoute();
     }
 }
