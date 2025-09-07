@@ -1,4 +1,6 @@
 
+using System.Security.Authentication;
+
 namespace LangNerd.Server.Api.Exceptions;
 
 public sealed class ExceptionMapperRoot : IExceptionMapperRoot
@@ -9,15 +11,24 @@ public sealed class ExceptionMapperRoot : IExceptionMapperRoot
         {
             AppException appEx => new ExceptionResponse(
                 appEx.Message,
-                $"{exception.GetType().Name}",
+                GetExceptionCode(exception),
                 StatusCodes.Status400BadRequest
             ),
-
+            InvalidCredentialException invalidCredentialException => new(
+                "Invalid credentials",
+                GetExceptionCode(exception),
+                StatusCodes.Status400BadRequest
+            ),
             _ => new ExceptionResponse(
                 "An unexpected error occurred",
-                "UNKNOWN_ERROR",
+                "Server_Error",
                 StatusCodes.Status500InternalServerError
             )
         };
     }
+
+    private static string GetExceptionCode(Exception ex)
+        => ex.GetType()
+            .Name
+            .Replace("Exception", "");
 }

@@ -1,13 +1,17 @@
 import React, { useState } from "react";
-import { execute } from "../../services/api";
-import LoginRequest from "../../apiRequests/login";
+import { fetchLogin } from "../../services/api";
+import { useNavigate } from "react-router";
 
 function LoginPage() {
     const [loginName, setLoginName] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     const handleLogin = async () => {
-        var a = await execute(new LoginRequest(loginName, password));
+        await fetchLogin(loginName, password);
+
+        // redirect to home page
+        navigate('/');
     }
 
     return (
